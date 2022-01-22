@@ -55,7 +55,7 @@
         </v-card>
 
         <!-- START SCHOLARSHIP CARD -->
-        <v-card v-if="data.profile.scholarship.applications" dark class="mx-auto mt-4 scholarshipGradient">
+        <v-card v-if="data.profile.scholarship.applications" dark class="mx-auto mt-4 scholarshipApplicationGradient">
           <div style="margin: 2.5%" class="py-5">
             <div class="d-flex justify-space-between align-center">
               <div class="justify-center onFireGif title">SCHOLARSHIP OPEN</div>
@@ -69,7 +69,7 @@
         <!-- END SCHOLARSHIP CARD -->
 
         <!-- START GIVEAWAY SCHOLARSHIP CARD -->
-        <v-card v-if="data.profile.scholarship.giveaways" dark class="mx-auto mt-4 scholarshipGradient">
+        <v-card v-if="data.profile.scholarship.giveaways" dark class="mx-auto mt-4 scholarshipGiveawayGradient">
           <div style="margin: 2.5%" class="py-5">
             <div class="d-flex justify-space-between align-center">
               <div class="justify-center title onFireGif">SCHOLARSHIP GIVEAWAY</div>
@@ -88,7 +88,7 @@
           <div style="margin: 2.5%">
             <p class="title">About me</p>
             <p class="overline mt-n5" v-if="data.user">
-              {{ data.user.age ? data.user.age + ' years | ' : '' }} 
+              {{ data.user.age ? '| ' + (new Date().getYear() - new Date(data.user.age).getYear()) + ' years | ' : '' }} 
               {{ data.user.gender ? data.user.gender + ' | ' : '' }} 
               {{ data.user.civil ? data.user.civil + ' | ' : '' }} 
               {{ data.user.country ? data.user.country + ' | ' : '' }} 
@@ -96,7 +96,7 @@
               <v-template v-if="data.user.languages">
               <span v-for="(item,index) in data.user.languages" :key="index"> {{item + ' | '}} </span> 
               </v-template>
-              {{ data.user.occupation ? data.user.occupation : '' }} 
+              {{ data.user.occupation ? data.user.occupation + ' | ' : '' }} 
             </p>
             <v-divider class="mb-4 mt-n5"></v-divider>
             <p>
@@ -175,7 +175,7 @@
 
             <v-divider class="pb-5" v-if="!data.profile.comments.data"></v-divider>
 
-            <v-card flat class="mb-5 text-center align-center" v-else>
+            <v-card v-if="!data.profile.comments.data" flat class="mb-5 text-center align-center">
               <v-icon large>mdi-message</v-icon>
              <v-card-title class="justify-center">No Comments Yet</v-card-title>
              <v-card-subtitle>Be the first to share what you think!</v-card-subtitle>
@@ -188,9 +188,9 @@
       </v-col>
 
       <!-- START LATERAL NAVBAR -->
-      <v-col cols="11" xs="4" sm="3" md="2">
-        <v-card class="stickySidebar" > el corazon lo perdiiiiiiiiiiiiii </v-card>
-      </v-col>
+      <!-- <v-col cols="11" xs="4" sm="3" md="2">
+        <v-card class="stickySidebar" ></v-card>
+      </v-col> -->
       <!-- END LATERAL NAVBAR -->
     </v-row>
 
@@ -219,12 +219,8 @@ export default {
   },
   methods: {
       getCommentUserPhoto() {
-        console.log('called', this.data.profile.comments.data)
-
-
       this.data.profile.comments.data.forEach((value) => {
 
-        console.log('fucking builllshit=>', value.userid)
       this.$fire.firestore.collection("users").where("userid", "==", value.userid)
         .get()
         .then((querySnapshot) => {
@@ -233,14 +229,12 @@ export default {
             // return this.userProfileFound = false // Set profile not found
           }
           querySnapshot.forEach((doc) => {
-            console.log(doc.id, " photo => ", doc.data());
             let data = doc.data()
             this.comments.push(data.profile.photo)
           });
           // return this.userProfileFound = true
         })
         .catch(function(error) {
-          console.log("Error getting documents: ", error);
           // return this.userProfileFound = false  // Set profile not found
         });
 
@@ -289,8 +283,12 @@ export default {
   background-repeat: repeat;
 }
 
-.scholarshipGradient {
+.scholarshipApplicationGradient {
   background: linear-gradient(to right, #8e2de2, #4a00e0);
+}
+
+.scholarshipGiveawayGradient {
+  background: linear-gradient(to right, #f12711, #f5af19);
 }
 
 .stickySidebar {

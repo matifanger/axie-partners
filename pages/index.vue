@@ -25,12 +25,12 @@
             </h3>
           </div>
           <v-card-actions class="mt-4 justify-center">
-            <v-btn class="text-none" large color="primary"
-              >Create a scholar profile</v-btn
-            >
-            <v-btn class="text-none" large color="success"
-              >Be a manager</v-btn
-            >
+            <v-btn @click="checkLoggedIn('scholar')" class="text-none" large color="primary">
+            Create a scholar profile
+              </v-btn>
+            <v-btn @click="checkLoggedIn('manager')" class="text-none" large color="success">
+              Be a manager
+              </v-btn>
           </v-card-actions>
         </v-col>
       </v-img>
@@ -55,6 +55,7 @@
             ></v-text-field>
             <template v-if="usersFound == true">
               <v-hover v-for="(item, i) in data" :key="i" v-slot="{ hover }">
+                <NuxtLink :to="'profile/'+item.userid" style="text-decoration: none">
                 <v-card
                   class="mb-2 ml-1"
                   :color="`${hover ? 'rgb(238, 240, 241)' : 'rgb(255,255,255)'}`"
@@ -78,21 +79,18 @@
                             {{ item.user.name }}
                           </v-list-item-title>
                           <v-list-item-subtitle class="mb-2">
-                            <v-icon small>mdi-map-marker</v-icon>Buenos Aires – Argentina
+                            <v-icon small>mdi-map-marker</v-icon> {{item.user.country}}
                             </v-list-item-subtitle>
                           <p style="line-height: 1.5">
-                            Do you have the ability to explain complex
-                            technical concepts in an easy-to-understand way? Are
-                            you energized by developing a personal brand and
-                            creating educational content that
-                            c.
+                            {{ item.profile.aboutme }}
                             </p>
                         </v-list-item-content>
                       </v-list-item>
                     </v-col>
                   </v-row>
-                </v-card>
+                </v-card></NuxtLink>
               </v-hover>
+              
             </template>
           </div>
         </v-col>
@@ -119,13 +117,23 @@ export default {
   },
   methods: {
     getQuery() {},
+    checkLoggedIn(data) {
+      console.log(this.$fireModule.auth().currentUser, data)
+      if (this.$fireModule.auth().currentUser) {
+        if (data == 'scholar'){
+          this.$router.push('/profile/settings')
+        } else if (data == 'manager') {
+          this.$router.push('/post')
+        }
+      } else {
+        this.$router.push('/register')
+      }
+    }
   },
   created() {
     // axios.get("https://pokeapi.co/api/v2/pokemon/?limit=100").then((res) => {
     //   this.data = res.data;
     // });
-
-
           this.$fire.firestore.collection("users")
         .get()
         .then((querySnapshot) => {
@@ -143,11 +151,6 @@ export default {
           console.log("Error getting documents: ", error);
           //this.userProfileFound = false  // Set profile not found
         });
-
-
-
-
-
   },
 };
 </script>

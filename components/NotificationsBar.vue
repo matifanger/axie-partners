@@ -53,9 +53,6 @@ export default {
       ],
     };
   },
-  methods: {
-    ...mapActions(["handle_auth_log_out"]),
-  },
 };
 </script>
 

@@ -55,7 +55,7 @@
 
     <v-card dense text rounded elevation="0" color="transparent">
       <v-list class="py-5">
-        <v-list-item :to="item.to" :disabled="item.disabled" two-line v-for="(item, i) in appsItems" :key="i">
+        <v-list-item :href="item.to" target="_blank" :disabled="item.disabled" two-line v-for="(item, i) in appsItems" :key="i">
           <v-hover v-slot="{ hover }">
           <v-btn :color="hover ? 'gray' : 'transparent' " class="text-left mx-auto py-11" height="5em" text block>
         <v-avatar class="mr-5" tile size="45" color="transparent" ><v-img :src="item.icon"></v-img></v-avatar>
@@ -81,13 +81,13 @@
       <!--START USER INFO / LOGIN -->
       <v-layout v-if="$store.state.logged_in">
           <v-card class="mx-auto justify-space-around"/>
-          <v-btn class="textdark--text my-auto" outlined>POST A SCHOLARSHIP</v-btn>
+          <v-btn to="/post" class="textdark--text my-auto" color="green" outlined>POST A SCHOLARSHIP</v-btn>
           <NotificationsBar/>
           <ProfileMenu/>
         </v-layout>
         <v-layout v-else>
           <v-card class="mx-auto justify-space-around"/>
-          <v-btn class="textdark--text my-auto" outlined>POST A SCHOLARSHIP</v-btn>
+          <v-btn to="/register" class="textdark--text my-auto" outlined>POST A SCHOLARSHIP</v-btn>
           <v-btn class="textdark--text ml-2 mr-2" to="/login"  v-on:click="entrarDialog = true" text>Login</v-btn>
           <v-btn class="white--text" to="/register" color="#4F46E5">Register</v-btn>
         </v-layout>
@@ -115,20 +115,19 @@ export default {
           icon: 'mdi-account-multiple-plus',
           color: '',
           title: 'Hire scholars',
-          to: '/jobs/create'
+          to: '/'
         },
         {
-          icon: 'mdi-account',
-          title: 'Scholar profile',
+          icon: 'mdi-format-align-left',
+          title: 'Scholarships',
           color:'',
-          to: '/account/scholar',
+          to: '/scholarships/applications',
         },
         {
-          icon: 'mdi-book',
-          title: 'Learn Axie Infinity',
+          icon: 'mdi-balloon',
+          title: 'Giveaways',
           color:'',
-          to: '/learn',
-          disabled: false,
+          to: '/scholarships/giveaways',
         },
       ],
       appsItems: [
@@ -136,37 +135,40 @@ export default {
           icon: '/icons/managers.png',
           title: 'Managers',
           description: 'Manage your scholarship recipients and analyze their progress',
-          to: '/apps/managers',
+          // to: '/apps/managers',
+          to: 'https://axie.watch/',
           disabled: false,
         },
         {
           icon: '/icons/calc.png',
           title: 'Breeding',
           description: 'Calculate how much profit you will make breeding axies and simulate a combination',
-          to: '/apps/breeding',
+          // to: '/apps/breeding',
+          to: 'https://www.axie.tech/breeding-costs',
           disabled: false,
         },
         {
           icon: '/icons/magnify.png',
           title: 'Axie finder',
           description: 'Find axies in the marketplace',
-          to: '/apps/axie-finder',
+          // to: '/apps/axie-finder',
+          to: 'https://www.axielegend.com/',
           disabled: false,
         },
-        {
-          icon: '/icons/tier.png',
-          title: 'Tier list',
-          description: 'Our tier list helps you to pick the best and strongest Axies',
-          to: '/apps/tier-list',
-          disabled: false,
-        },
-        {
-          icon: '/icons/chart.png',
-          title: 'Charts',
-          description: 'See whats going on with AXS and SLP and the entire system',
-          to: '/apps/charts',
-          disabled: false,
-        }
+        // {
+        //   icon: '/icons/tier.png',
+        //   title: 'Tier list',
+        //   description: 'Our tier list helps you to pick the best and strongest Axies',
+        //   to: '/apps/tier-list',
+        //   disabled: false,
+        // },
+        // {
+        //   icon: '/icons/chart.png',
+        //   title: 'Charts',
+        //   description: 'See whats going on with AXS and SLP and the entire system',
+        //   to: '/apps/charts',
+        //   disabled: false,
+        // }
         ],
       view: {
         topOfPage: true,
